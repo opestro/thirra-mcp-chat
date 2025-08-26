@@ -42,8 +42,15 @@ const getApiKey = (key: string): string | undefined => {
 const geminiClient = createGoogleGenerativeAI({
   apiKey: getApiKey('GOOGLE_API_KEY'),
 });
+// Create different OpenAI clients for different models with specific configurations
 const openaiClient = createOpenAI({
   apiKey: getApiKey('OPENAI_API_KEY'),
+});
+
+// GPT-5 Mini client with specific configuration to avoid temperature issues
+const openaiGpt5MiniClient = createOpenAI({
+  apiKey: getApiKey('OPENAI_API_KEY'),
+  // No temperature setting to use model defaults
 });
 // const xaiClient = createXai({
 //   apiKey: getApiKey('XAI_API_KEY'),
@@ -64,7 +71,7 @@ const languageModels = {
     model: geminiClient('gemini-2.5-pro'),
     middleware
   }),
-  "gpt-5-mini": openaiClient('gpt-5-mini') ,
+  "gpt-5-mini": openaiGpt5MiniClient('gpt-5-mini'),
   "gpt-5-thinking": wrapLanguageModel({
     model: openaiClient('gpt-5'),
     middleware
