@@ -130,6 +130,12 @@ export async function POST(req: Request) {
     tools,
     maxSteps: 20,
     providerOptions: {
+      openai: selectedModel === 'gpt-5-thinking' ? {
+        thinking: {
+          type: 'enabled',
+          budgetTokens: 12000
+        },
+      } : {},
       google: selectedModel === 'gemini-2.5-pro-thinking' ? {
         thinkingConfig: {
           thinkingBudget: 1024,
