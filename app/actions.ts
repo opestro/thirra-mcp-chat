@@ -1,9 +1,19 @@
 "use server";
 
-import { google } from "@ai-sdk/google";
-import { openai } from "@ai-sdk/openai";
 import { generateObject } from "ai";
 import { z } from "zod";
+import { createGoogleGenerativeAI } from "@ai-sdk/google";
+
+// Helper to get API keys from environment variables (server-side only)
+const getApiKey = (key: string): string | undefined => {
+  // Only use environment variables on server side for security
+  return process.env[key] || undefined;
+};
+
+// Configure Google client with the same setup as providers.ts
+const geminiClient = createGoogleGenerativeAI({
+  apiKey: getApiKey('GOOGLE_API_KEY'),
+});
 
 // Helper to extract text content from a message regardless of format
 function getMessageText(message: any): string {
@@ -55,7 +65,7 @@ export async function generateTitle(messages: any[]): Promise<string> {
 
    try {
     const { object: titleObject } = await generateObject({
-      model: google('models/gemini-2.5-flash'),
+      model: geminiClient('models/gemini-2.5-flash'),
       schema: z.object({
         title: z.string().describe("A short, descriptive title for the conversation"),
       }),

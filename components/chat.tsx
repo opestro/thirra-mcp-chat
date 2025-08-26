@@ -2,7 +2,7 @@
 
 import { defaultModel, type modelID } from "@/ai/providers";
 import { Message, useChat } from "@ai-sdk/react";
-import { useState, useEffect, useMemo, useCallback } from "react";
+import { useState, useEffect, useMemo, useCallback, useRef } from "react";
 import { Textarea } from "./textarea";
 import { ProjectOverview } from "./project-overview";
 import { Messages } from "./messages";
@@ -33,13 +33,16 @@ export default function Chat() {
   const [selectedModel, setSelectedModel] = useLocalStorage<modelID>("selectedModel", defaultModel);
   const [userId, setUserId] = useState<string>('');
   const [generatedChatId, setGeneratedChatId] = useState<string>('');
+  const [isUserIdReady, setIsUserIdReady] = useState(false);
   
   // Get MCP server data from context
   const { mcpServersForApi } = useMCP();
   
   // Initialize userId
   useEffect(() => {
-    setUserId(getUserId());
+    const id = getUserId();
+    setUserId(id);
+    setIsUserIdReady(true);
   }, []);
   
   // Generate a chat ID if needed
@@ -72,7 +75,7 @@ export default function Chat() {
       
       return response.json() as Promise<ChatData>;
     },
-    enabled: !!chatId && !!userId,
+    enabled: !!chatId && !!userId && isUserIdReady,
     retry: 1,
     staleTime: 1000 * 60 * 5, // 5 minutes
     refetchOnWindowFocus: false
