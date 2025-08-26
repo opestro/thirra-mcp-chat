@@ -1,6 +1,6 @@
 "use server";
 
-import { groq } from "@ai-sdk/groq";
+import { google } from "@ai-sdk/google";
 import { openai } from "@ai-sdk/openai";
 import { generateObject } from "ai";
 import { z } from "zod";
@@ -37,30 +37,36 @@ function getMessageText(message: any): string {
 }
 
 export async function generateTitle(messages: any[]): Promise<string> {
+  console.log("messages", messages);
   try {
     // Find the first user message and use it for title generation
     const userMessage = messages.find(m => m.role === 'user');
-
+    console.log("userMessage", userMessage);
     if (!userMessage) {
       return 'New Chat';
     }
 
     // Extract text content from the message
     const messageText = getMessageText(userMessage);
-
+    console.log("messageText", messageText);
     if (!messageText.trim()) {
       return 'New Chat';
     }
 
+   try {
     const { object: titleObject } = await generateObject({
-      model: groq('llama-3.1-8b-instant'),
+      model: google('models/gemini-2.5-flash'),
       schema: z.object({
         title: z.string().describe("A short, descriptive title for the conversation"),
       }),
       prompt: `Generate a concise title (max 6 words) for a conversation that starts with: "${messageText.slice(0, 200)}"`,
     });
-
+    console.log("titleObject", titleObject);
     return titleObject.title || 'New Chat';
+   } catch (error) {
+    console.error('Error generating title:', error);
+    return 'New Chat';
+   }
   } catch (error) {
     console.error('Error generating title:', error);
     return 'New Chat';

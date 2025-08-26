@@ -1,7 +1,8 @@
 import { model, type modelID } from "@/ai/providers";
 import { smoothStream, streamText, type UIMessage } from "ai";
 import { appendResponseMessages } from 'ai';
-import { saveChat, saveMessages, convertToDBMessages } from '@/lib/chat-store';
+import { saveChat, saveMessages } from '@/lib/chat-store';
+import { convertToDBMessages } from '@/lib/chat-utils';
 import { nanoid } from 'nanoid';
 import { db } from '@/lib/db';
 import { chats } from '@/lib/db/schema';
@@ -129,11 +130,11 @@ export async function POST(req: Request) {
     tools,
     maxSteps: 20,
     providerOptions: {
-      google: {
+      google: selectedModel === 'gemini-2.5-pro-thinking' ? {
         thinkingConfig: {
-          thinkingBudget: 2048,
+          thinkingBudget: 1024,
         },
-      },
+      } : {},
       anthropic: {
         thinking: {
           type: 'enabled',

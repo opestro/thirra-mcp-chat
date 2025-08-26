@@ -74,6 +74,7 @@
     "eslint": "^9.24.0",
     "eslint-config-next": "15.3.5",
     "pg-pool": "^3.10.1",
+    "react-dev-inspector": "^2.0.1",
     "tailwindcss": "^4.1.11",
     "typescript": "^5.8.3"
   },
