@@ -5,7 +5,7 @@ const CloudflareRagSearchSchema = z.object({
   query: z.string().describe("The search query to find relevant information in the RAG database"),
   rag_name: z.string().optional().describe("The name of the RAG database (defaults to configured RAG name)"),
   limit: z.number().min(1).max(100).optional().describe("Maximum number of results to return (default: 10)"),
-  user_id: z.string().optional().describe("User ID to filter results to only the user's files (automatically injected by the system)")
+  filter_key: z.string().optional().describe("filter key to filter results to only the key's files (automatically injected by the system)")
 });
 
 interface CloudflareRAGResponse {
@@ -41,14 +41,14 @@ class CloudflareRagSearchTool extends MCPTool {
     console.log(`[CloudflareRagSearchTool] === TOOL EXECUTION STARTED ===`);
     console.log(`[CloudflareRagSearchTool] Raw input received:`, JSON.stringify(input, null, 2));
     
-    const { query, rag_name, limit = 10, user_id } = input;
+    const { query, rag_name, limit = 10, filter_key } = input;
 
-    console.log(`[CloudflareRagSearchTool] Parsed params:`, { query, rag_name, limit, user_id });
+    console.log(`[CloudflareRagSearchTool] Parsed params:`, { query, rag_name, limit, filter_key });
     console.log(`[CloudflareRagSearchTool] Query type:`, typeof query);
     console.log(`[CloudflareRagSearchTool] Query value:`, JSON.stringify(query));
     
-    const CLOUDFLARE_ACCOUNT_ID = process.env.CLOUDFLARE_ACCOUNT_ID || "e61c0c9130c9e6736e8259692d2b0d8c";
-    const CLOUDFLARE_RAG_NAME = process.env.CLOUDFLARE_RAG_NAME || "merris-rag-testing";
+    const CLOUDFLARE_ACCOUNT_ID = process.env.CLOUDFLARE_ACCOUNT_ID || "e61c0c91********692d2b0d8c";
+    const CLOUDFLARE_RAG_NAME = process.env.CLOUDFLARE_RAG_NAME || "rag-testing";
     const CLOUDFLARE_API_TOKEN = process.env.CLOUDFLARE_API_TOKEN;
     const ragName = rag_name || CLOUDFLARE_RAG_NAME;
 
@@ -71,9 +71,9 @@ class CloudflareRagSearchTool extends MCPTool {
       throw new Error(errorMsg);
     }
 
-    if (!user_id || !user_id.trim()) {
-      const errorMsg = "User ID is required for secure file access. This should be automatically provided by the system. If you're seeing this error, there may be an authentication issue. Please contact support or try refreshing your session.";
-      console.error(`[CloudflareRagSearchTool] Error: Missing user_id in args:`, JSON.stringify(input, null, 2));
+    if (!filter_key || !filter_key.trim()) {
+      const errorMsg = "filter_key is required for secure file access. This should be automatically provided by the system. If you're seeing this error, there may be an authentication issue. Please contact support or try refreshing your session.";
+      console.error(`[CloudflareRagSearchTool] Error: Missing filter_key in args:`, JSON.stringify(input, null, 2));
       throw new Error(errorMsg);
     }
 
@@ -92,7 +92,7 @@ class CloudflareRagSearchTool extends MCPTool {
         filters: {
           type: "eq",
           key: "folder",
-          value: `${user_id}/`
+          value: `${filter_key}/`
         }
       };
       

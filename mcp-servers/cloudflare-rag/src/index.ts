@@ -11,9 +11,9 @@ console.log(`[Server] Importing CloudflareRagSearchTool...`);
 import "./tools/CloudflareRagSearchTool.js";
 
 // Cloudflare API configuration
-const CLOUDFLARE_ACCOUNT_ID = process.env.CLOUDFLARE_ACCOUNT_ID || "e61c0c9130c9e6736e8259692d2b0d8c";
+const CLOUDFLARE_ACCOUNT_ID = process.env.CLOUDFLARE_ACCOUNT_ID || "e61c0c********692d2b0d8c";
 const CLOUDFLARE_API_TOKEN = process.env.CLOUDFLARE_API_TOKEN;
-const CLOUDFLARE_RAG_NAME = process.env.CLOUDFLARE_RAG_NAME || "merris-rag-testing";
+const CLOUDFLARE_RAG_NAME = process.env.CLOUDFLARE_RAG_NAME || "rag-testing";
 const PORT = process.env.PORT ? parseInt(process.env.PORT) : 3002;
 
 // Create server with HTTP Stream Transport

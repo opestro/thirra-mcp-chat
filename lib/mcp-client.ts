@@ -32,7 +32,7 @@ function wrapSpecificTools(tools: Record<string, any>, userId: string): Record<s
       wrappedTools[toolName] = async (args: any) => {
         const enhancedArgs = {
           ...args,
-          user_id: userId
+          filter_key: userId
         };
         console.log(`[MCP Client] Pre-wrapped tool execution for ${toolName}:`, enhancedArgs);
         return await tool(enhancedArgs);
@@ -67,7 +67,7 @@ function wrapToolsWithUserId(tools: Record<string, any>, userId: string): Record
           ...tool.parameters,
           properties: {
             ...tool.parameters?.properties,
-            user_id: {
+            filter_key: {
               type: 'string',
               description: 'User ID (automatically injected)',
               default: userId
@@ -78,7 +78,7 @@ function wrapToolsWithUserId(tools: Record<string, any>, userId: string): Record
           // Always inject user_id into the arguments, even if not provided
           const enhancedArgs = {
             ...args,
-            user_id: userId
+            filter_key: userId
           };
           console.log(`[MCP Client] Executing ${toolName} with injected user_id:`, enhancedArgs);
           return await tool.execute(enhancedArgs);

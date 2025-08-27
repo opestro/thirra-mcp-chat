@@ -42,3 +42,4 @@ yarn-error.log*
 next-env.d.ts
 */node_modules
 /mcp-servers/cloudflare-rag/node_modules
+/mcp-servers/cloudflare-rag/build
