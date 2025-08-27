@@ -18,10 +18,10 @@ export const metadata: Metadata = {
     "Thirra AI is your friend Ai assistant.",
   openGraph: {
     siteName: "Thirra AI",
-    url: "https://mcpchat.scira.ai",
+    url: "https://mcpchat.thirra.ai",
     images: [
       {
-        url: "https://mcpchat.scira.ai/opengraph-image.png",
+        url: "https://mcpchat.thirra.ai/opengraph-image.png",
         width: 1200,
         height: 630,
       },
@@ -32,7 +32,7 @@ export const metadata: Metadata = {
     title: "Thirra AI",
     description:
       "Thirra AI is your friend Ai assistant.",
-    images: ["https://mcpchat.scira.ai/twitter-image.png"],
+    images: ["https://mcpchat.thirra.ai/twitter-image.png"],
   },
 };
 

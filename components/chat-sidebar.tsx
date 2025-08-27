@@ -175,8 +175,8 @@ export function ChatSidebar() {
               }`}
             >
               <Image
-                src="/scira.png"
-                alt="Scira Logo"
+                src="/thirra.png"
+                alt="thirra Logo"
                 width={24}
                 height={24}
                 className="absolute transform scale-75"
