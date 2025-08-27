@@ -5,7 +5,7 @@ const CloudflareRagSearchSchema = z.object({
   query: z.string().describe("The search query to find relevant information in the RAG database"),
   rag_name: z.string().optional().describe("The name of the RAG database (defaults to configured RAG name)"),
   limit: z.number().min(1).max(100).optional().describe("Maximum number of results to return (default: 10)"),
-  user_id: z.string().describe("User ID to filter results to only the user's files (used as folder name)")
+  user_id: z.string().optional().describe("User ID to filter results to only the user's files (automatically injected by the system)")
 });
 
 interface CloudflareRAGResponse {
@@ -72,8 +72,8 @@ class CloudflareRagSearchTool extends MCPTool {
     }
 
     if (!user_id || !user_id.trim()) {
-      const errorMsg = "User ID is required for accessing files. Please provide a valid user_id.";
-      console.error(`[CloudflareRagSearchTool] Error:`, errorMsg);
+      const errorMsg = "User ID is required for secure file access. This should be automatically provided by the system. If you're seeing this error, there may be an authentication issue. Please contact support or try refreshing your session.";
+      console.error(`[CloudflareRagSearchTool] Error: Missing user_id in args:`, JSON.stringify(input, null, 2));
       throw new Error(errorMsg);
     }
 
