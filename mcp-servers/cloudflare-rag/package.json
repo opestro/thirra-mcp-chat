@@ -10,15 +10,26 @@
   "scripts": {
     "build": "tsc && chmod 755 build/index.js",
     "dev": "tsc && node build/index.js",
+    "start": "node build/index.js",
+    "start:dev": "tsc && PORT=3000 node build/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "files": ["build"],
-  "keywords": ["mcp", "cloudflare", "rag", "ai"],
+  "files": [
+    "build"
+  ],
+  "keywords": [
+    "mcp",
+    "cloudflare",
+    "rag",
+    "ai"
+  ],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.17.4",
     "dotenv": "^17.2.1",
+    "eventsource": "^4.0.0",
+    "mcp-framework": "^0.2.15",
     "zod": "^3.25.76"
   },
   "devDependencies": {

@@ -167,7 +167,7 @@ const PurePreviewMessage = ({
           "group-data-[role=user]/message:w-fit"
         )}
       >
-        <div className="flex flex-col w-full space-y-3">
+        <div className="flex flex-col w-full space-y-2">
           {message.parts?.map((part, i) => {
             switch (part.type) {
               case "text":
@@ -196,10 +196,10 @@ const PurePreviewMessage = ({
                 return (
                   <ToolInvocation
                     key={`message-${message.id}-part-${i}`}
-                    toolName={toolName}
+                    toolName={toolName == "cloudflare_rag_search" ? "Searching..." : toolName}
                     state={state}
-                    args={args}
-                    result={result}
+                    args={toolName == "cloudflare_rag_search" ? "" : args}
+                    result={toolName == "cloudflare_rag_search" ? "Found results..." : result}
                     isLatestMessage={isLatestMessage}
                     status={status}
                   />
