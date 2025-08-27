@@ -6,9 +6,6 @@ dotenv.config();
 // Import tools for registration
 console.log(`[Server] Importing CloudflareRagSearchTool...`);
 import "./tools/CloudflareRagSearchTool.js";
-console.log(`[Server] Importing CloudflareRagInfoTool...`);
-import "./tools/CloudflareRagInfoTool.js";
-console.log(`[Server] All tools imported.`);
 // Cloudflare API configuration
 const CLOUDFLARE_ACCOUNT_ID = process.env.CLOUDFLARE_ACCOUNT_ID || "e61c0c9130c9e6736e8259692d2b0d8c";
 const CLOUDFLARE_API_TOKEN = process.env.CLOUDFLARE_API_TOKEN;

@@ -4,7 +4,8 @@ import { z } from "zod";
 const CloudflareRagSearchSchema = z.object({
   query: z.string().describe("The search query to find relevant information in the RAG database"),
   rag_name: z.string().optional().describe("The name of the RAG database (defaults to configured RAG name)"),
-  limit: z.number().min(1).max(100).optional().describe("Maximum number of results to return (default: 10)")
+  limit: z.number().min(1).max(100).optional().describe("Maximum number of results to return (default: 10)"),
+  user_id: z.string().describe("User ID to filter results to only the user's files (used as folder name)")
 });
 
 interface CloudflareRAGResponse {
@@ -40,9 +41,9 @@ class CloudflareRagSearchTool extends MCPTool {
     console.log(`[CloudflareRagSearchTool] === TOOL EXECUTION STARTED ===`);
     console.log(`[CloudflareRagSearchTool] Raw input received:`, JSON.stringify(input, null, 2));
     
-    const { query, rag_name, limit = 10 } = input;
+    const { query, rag_name, limit = 10, user_id } = input;
 
-    console.log(`[CloudflareRagSearchTool] Parsed params:`, { query, rag_name, limit });
+    console.log(`[CloudflareRagSearchTool] Parsed params:`, { query, rag_name, limit, user_id });
     console.log(`[CloudflareRagSearchTool] Query type:`, typeof query);
     console.log(`[CloudflareRagSearchTool] Query value:`, JSON.stringify(query));
     
@@ -70,6 +71,12 @@ class CloudflareRagSearchTool extends MCPTool {
       throw new Error(errorMsg);
     }
 
+    if (!user_id || !user_id.trim()) {
+      const errorMsg = "User ID is required for accessing files. Please provide a valid user_id.";
+      console.error(`[CloudflareRagSearchTool] Error:`, errorMsg);
+      throw new Error(errorMsg);
+    }
+
     const endpoint = `/accounts/${CLOUDFLARE_ACCOUNT_ID}/autorag/rags/${ragName}/ai-search`;
     const url = `https://api.cloudflare.com/client/v4${endpoint}`;
 
@@ -82,10 +89,15 @@ class CloudflareRagSearchTool extends MCPTool {
       const requestBody = {
         query: query.trim(),
         limit: limit,
+        filters: {
+          type: "eq",
+          key: "folder",
+          value: `${user_id}/`
+        }
       };
       
       console.log(`[CloudflareRagSearchTool] Making API request to:`, url);
-      console.log(`[CloudflareRagSearchTool] Request body:`, requestBody);
+      console.log(`[CloudflareRagSearchTool] Request body:`, JSON.stringify(requestBody, null, 2));
       
       const response = await this.fetch(url, {
         method: "POST",

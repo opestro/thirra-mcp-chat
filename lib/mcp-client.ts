@@ -19,11 +19,42 @@ export interface MCPClientManager {
 }
 
 /**
+ * Wrap MCP tools to inject user_id for specific tools that require it
+ */
+function wrapToolsWithUserId(tools: Record<string, any>, userId: string): Record<string, any> {
+  const wrappedTools: Record<string, any> = {};
+  
+  for (const [toolName, tool] of Object.entries(tools)) {
+    if (toolName === 'cloudflare_rag_search') {
+      // Wrap the cloudflare_rag_search tool to automatically inject user_id
+      wrappedTools[toolName] = {
+        ...tool,
+        execute: async (args: any) => {
+          // Inject user_id into the arguments
+          const enhancedArgs = {
+            ...args,
+            user_id: userId
+          };
+          console.log(`[MCP Client] Injecting user_id for ${toolName}:`, enhancedArgs);
+          return await tool.execute(enhancedArgs);
+        }
+      };
+    } else {
+      // Keep other tools as-is
+      wrappedTools[toolName] = tool;
+    }
+  }
+  
+  return wrappedTools;
+}
+
+/**
  * Initialize MCP clients for API calls
  * This uses the already running persistent HTTP or SSE servers
  */
 export async function initializeMCPClients(
   mcpServers: MCPServerConfig[] = [],
+  userId?: string,
   abortSignal?: AbortSignal
 ): Promise<MCPClientManager> {
   // Initialize tools
@@ -63,6 +94,11 @@ export async function initializeMCPClients(
       console.error("Failed to initialize MCP client:", error);
       // Continue with other servers instead of failing the entire request
     }
+  }
+
+  // Wrap tools with user ID injection if userId is provided
+  if (userId) {
+    tools = wrapToolsWithUserId(tools, userId);
   }
 
   // Register cleanup for all clients if an abort signal is provided

@@ -39,14 +39,20 @@ npm run build
 
 ### Available Tools
 
-**`cloudflare_rag_search`** - AI-powered RAG database search
+**`cloudflare_rag_search`** - AI-powered RAG database search with user isolation
 - `query` (required): The search query (e.g., "who is mehdi", "explain machine learning")
+- `user_id` (required): User ID for file access control (automatically injected by the system)
 - `rag_name` (optional): RAG database name (defaults to configured name)
 - `limit` (optional): Maximum results to return (1-100, default: 10)
 
+**Security Features:**
+- 🔒 **User Isolation**: Each user can only access files in their own folder (`user_id/`)
+- 🛡️ **Automatic Filtering**: User ID is automatically injected by the MCP client
+- 🚫 **Cross-User Protection**: Prevents users from accessing other users' documents
+
 **Response Format:**
 - `ai_response`: AI-generated summary from Cloudflare
-- `results`: Detailed source documents with scores and content
+- `results`: Detailed source documents with scores and content (filtered by user)
 - `formatted_summary`: Human-readable formatted response
 
 ### Running the Server
@@ -161,9 +167,19 @@ With the request body:
 ```json
 {
   "query": "your search query",
-  "limit": 10
+  "limit": 10,
+  "filters": {
+    "type": "eq",
+    "key": "folder",
+    "value": "user123/"
+  }
 }
 ```
+
+**Filter Structure:**
+- Automatically filters results to only include files in the user's folder
+- Uses the `user_id` as the folder name with trailing slash
+- Ensures complete user isolation at the API level
 
 ## Error Handling
 
