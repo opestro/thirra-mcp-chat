@@ -106,22 +106,22 @@ export async function POST(req: Request) {
   const getProviderOptions = () => {
     const options: any = {};
     
-    if (selectedModel === 'gpt-5-thinking') {
-      options.openai = {
-        thinking: {
-          type: 'enabled',
-          budgetTokens: 12000
-        },
-      };
-    }
+    // if (selectedModel === 'gpt-5-thinking') {
+    //   options.openai = {
+    //     thinking: {
+    //       type: 'enabled',
+    //       budgetTokens: 12000
+    //     },
+    //   };
+    // }
     
-    if (selectedModel === 'gemini-2.5-pro-thinking') {
-      options.google = {
-        thinkingConfig: {
-          thinkingBudget: 1024,
-        },
-      };
-    }
+    // if (selectedModel === 'gemini-2.5-pro-thinking') {
+    //   options.google = {
+    //     thinkingConfig: {
+    //       thinkingBudget: 1024,
+    //     },
+    //   };
+    // }
     
     // Always include anthropic options for other models that might use it
     options.anthropic = {

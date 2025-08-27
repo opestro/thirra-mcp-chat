@@ -12,7 +12,7 @@ import { Inspector } from "react-dev-inspector";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://mcpchat.scira.ai"),
+  metadataBase: new URL("https://therra.ai"),
   title: "Thirra AI",
   description:
     "Thirra AI is your friend Ai assistant.",
