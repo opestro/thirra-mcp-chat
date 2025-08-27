@@ -115,7 +115,7 @@ export function ReasoningMessagePart({
             detail.type === "text" ? (
               <div
                 key={detailIndex}
-                className="px-2 py-1.5 bg-muted/10 rounded-md border border-border/30"
+                className="px-2 py-1.5 bg-muted/10 rounded-md border border-border/30 message-text"
               >
                 <Markdown>{detail.text}</Markdown>
               </div>
@@ -167,7 +167,7 @@ const PurePreviewMessage = ({
           "group-data-[role=user]/message:w-fit"
         )}
       >
-        <div className="flex flex-col w-full space-y-3">
+        <div className="flex flex-col w-full space-y-2">
           {message.parts?.map((part, i) => {
             switch (part.type) {
               case "text":
@@ -177,8 +177,8 @@ const PurePreviewMessage = ({
                     className="flex flex-row gap-2 items-start w-full"
                   >
                     <div
-                      className={cn("flex flex-col gap-3 w-full", {
-                        "bg-secondary text-secondary-foreground px-4 py-3 rounded-2xl":
+                      className={cn("flex flex-col gap-3 w-full message-text ", {
+                        "bg-secondary text-secondary-foreground px-4 py-3 rounded-2xl ":
                           message.role === "user",
                       })}
                     >
@@ -196,10 +196,10 @@ const PurePreviewMessage = ({
                 return (
                   <ToolInvocation
                     key={`message-${message.id}-part-${i}`}
-                    toolName={toolName}
+                    toolName={toolName == "cloudflare_rag_search" ? "Searching..." : toolName}
                     state={state}
-                    args={args}
-                    result={result}
+                    args={toolName == "cloudflare_rag_search" ? "" : args}
+                    result={toolName == "cloudflare_rag_search" ? "Found results..." : result}
                     isLatestMessage={isLatestMessage}
                     status={status}
                   />

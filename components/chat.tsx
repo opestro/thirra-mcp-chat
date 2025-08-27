@@ -2,7 +2,7 @@
 
 import { defaultModel, type modelID } from "@/ai/providers";
 import { Message, useChat } from "@ai-sdk/react";
-import { useState, useEffect, useMemo, useCallback } from "react";
+import { useState, useEffect, useMemo, useCallback, useRef } from "react";
 import { Textarea } from "./textarea";
 import { ProjectOverview } from "./project-overview";
 import { Messages } from "./messages";
@@ -11,7 +11,7 @@ import { useRouter, useParams } from "next/navigation";
 import { getUserId } from "@/lib/user-id";
 import { useLocalStorage } from "@/lib/hooks/use-local-storage";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { convertToUIMessages } from "@/lib/chat-store";
+import { convertToUIMessages } from "@/lib/chat-utils";
 import { type Message as DBMessage } from "@/lib/db/schema";
 import { nanoid } from "nanoid";
 import { useMCP } from "@/lib/context/mcp-context";
@@ -33,13 +33,18 @@ export default function Chat() {
   const [selectedModel, setSelectedModel] = useLocalStorage<modelID>("selectedModel", defaultModel);
   const [userId, setUserId] = useState<string>('');
   const [generatedChatId, setGeneratedChatId] = useState<string>('');
+  const [isUserIdReady, setIsUserIdReady] = useState(false);
+  const [lastResponseTime, setLastResponseTime] = useState<number | null>(null);
+  const [cooldownActive, setCooldownActive] = useState(false);
   
   // Get MCP server data from context
   const { mcpServersForApi } = useMCP();
   
   // Initialize userId
   useEffect(() => {
-    setUserId(getUserId());
+    const id = getUserId();
+    setUserId(id);
+    setIsUserIdReady(true);
   }, []);
   
   // Generate a chat ID if needed
@@ -72,7 +77,7 @@ export default function Chat() {
       
       return response.json() as Promise<ChatData>;
     },
-    enabled: !!chatId && !!userId,
+    enabled: !!chatId && !!userId && isUserIdReady,
     retry: 1,
     staleTime: 1000 * 60 * 5, // 5 minutes
     refetchOnWindowFocus: false
@@ -115,12 +120,23 @@ export default function Chat() {
       },
       experimental_throttle: 100,
       onFinish: () => {
+        // Start cooldown period after response is received
+        const now = Date.now();
+        setLastResponseTime(now);
+        setCooldownActive(true);
+        
+        // Set a timer to end the cooldown after 10 seconds
+        setTimeout(() => {
+          setCooldownActive(false);
+        }, 10000);
+        
         // Invalidate the chats query to refresh the sidebar
         if (userId) {
           queryClient.invalidateQueries({ queryKey: ['chats', userId] });
         }
       },
       onError: (error) => {
+        // Don't start cooldown on error
         toast.error(
           error.message.length > 0
             ? error.message
@@ -133,6 +149,11 @@ export default function Chat() {
   // Custom submit handler
   const handleFormSubmit = useCallback((e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    
+    // Don't submit if cooldown is active
+    if (cooldownActive) {
+      return;
+    }
     
     if (!chatId && generatedChatId && input.trim()) {
       // If this is a new conversation, redirect to the chat page with the generated ID
@@ -147,7 +168,7 @@ export default function Chat() {
       // Normal submission for existing chats
       handleSubmit(e);
     }
-  }, [chatId, generatedChatId, input, handleSubmit, router]);
+  }, [chatId, generatedChatId, input, handleSubmit, router, cooldownActive]);
 
   const isLoading = status === "streaming" || status === "submitted" || isLoadingChat;
 
@@ -168,6 +189,8 @@ export default function Chat() {
               isLoading={isLoading}
               status={status}
               stop={stop}
+              cooldownActive={cooldownActive}
+              lastResponseTime={lastResponseTime}
             />
           </form>
         </div>
@@ -188,6 +211,8 @@ export default function Chat() {
               isLoading={isLoading}
               status={status}
               stop={stop}
+              cooldownActive={cooldownActive}
+              lastResponseTime={lastResponseTime}
             />
           </form>
         </>

@@ -170,23 +170,23 @@ export function ChatSidebar() {
             }`}
           >
             <div
-              className={`relative rounded-full bg-primary/70 flex items-center justify-center ${
+              className={`relative rounded-full bg-white/50 flex items-center justify-center bg-cover ${
                 isCollapsed ? "size-5 p-3" : "size-6"
               }`}
             >
               <Image
-                src="/scira.png"
-                alt="Scira Logo"
+                src="/thirra-bg.png"
+                alt="thirra Bg"
                 width={24}
                 height={24}
-                className="absolute transform scale-75"
-                unoptimized
+                className="absolute transform scale-100 rounded-full"
+                
                 quality={100}
               />
             </div>
             {!isCollapsed && (
               <div className="font-semibold text-lg text-foreground/90">
-                MCP
+                Thirra.ai
               </div>
             )}
           </div>

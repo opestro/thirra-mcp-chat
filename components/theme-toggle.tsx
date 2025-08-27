@@ -51,6 +51,30 @@ export function ThemeToggle({
           <Sun className="mr-2 h-4 w-4" />
           <span>Sunset</span>
         </DropdownMenuItem>
+        <DropdownMenuItem onSelect={() => setTheme("forest")}>
+          <Flame className="mr-2 h-4 w-4" />
+          <span>Forest</span>
+        </DropdownMenuItem>
+        <DropdownMenuItem onSelect={() => setTheme("ocean")}>
+          <Sun className="mr-2 h-4 w-4" />
+          <span>Ocean</span>
+        </DropdownMenuItem>
+        <DropdownMenuItem onSelect={() => setTheme("lavender")}>
+          <CircleDashed className="mr-2 h-4 w-4" />
+          <span>Lavender</span>
+        </DropdownMenuItem>
+        <DropdownMenuItem onSelect={() => setTheme("rose")}>
+          <Flame className="mr-2 h-4 w-4" />
+          <span>Rose</span>
+        </DropdownMenuItem>
+        <DropdownMenuItem onSelect={() => setTheme("mint")}>
+          <Sun className="mr-2 h-4 w-4" />
+          <span>Mint</span>
+        </DropdownMenuItem>
+        <DropdownMenuItem onSelect={() => setTheme("amber")}>
+          <CircleDashed className="mr-2 h-4 w-4" />
+          <span>Amber</span>
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );

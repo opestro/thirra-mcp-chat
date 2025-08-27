@@ -17,6 +17,8 @@ export async function GET(request: Request, { params }: Params) {
     }
 
     const { id } = await params;
+    console.log("id", id);
+    console.log("userId", userId);
     const chat = await getChatById(id, userId);
 
     if (!chat) {

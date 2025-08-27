@@ -30,7 +30,7 @@ export default function ChatPage() {
               "x-user-id": userId,
             },
           });
-
+          console.log(response);
           if (!response.ok) {
             // For 404, return empty chat data instead of throwing
             if (response.status === 404) {
