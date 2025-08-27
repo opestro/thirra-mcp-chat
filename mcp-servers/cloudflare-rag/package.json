@@ -1,0 +1,28 @@
+{
+  "name": "cloudflare-rag",
+  "version": "1.0.0",
+  "description": "MCP Server for Cloudflare RAG API",
+  "type": "module",
+  "main": "build/index.js",
+  "bin": {
+    "cloudflare-rag": "./build/index.js"
+  },
+  "scripts": {
+    "build": "tsc && chmod 755 build/index.js",
+    "dev": "tsc && node build/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "files": ["build"],
+  "keywords": ["mcp", "cloudflare", "rag", "ai"],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.17.4",
+    "dotenv": "^17.2.1",
+    "zod": "^3.25.76"
+  },
+  "devDependencies": {
+    "@types/node": "^24.3.0",
+    "typescript": "^5.9.2"
+  }
+}

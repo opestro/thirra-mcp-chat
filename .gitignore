@@ -40,3 +40,5 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+*/node_modules
+/mcp-servers/cloudflare-rag/node_modules
