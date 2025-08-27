@@ -186,7 +186,7 @@ export function ChatSidebar() {
             </div>
             {!isCollapsed && (
               <div className="font-semibold text-lg text-foreground/90">
-                MCP
+                Thirra AI
               </div>
             )}
           </div>
