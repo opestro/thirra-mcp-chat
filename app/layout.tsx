@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Montserrat } from "next/font/google";
 import { ChatSidebar } from "@/components/chat-sidebar";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Menu } from "lucide-react";
@@ -9,15 +9,20 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import "./globals.css";
 import { BotIdClient } from "botid/client";
 import { Inspector } from "react-dev-inspector";
-const inter = Inter({ subsets: ["latin"] });
+
+const montserrat = Montserrat({ 
+  subsets: ["latin"],
+  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
+  variable: "--font-sans"
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://therra.ai"),
-  title: "Thirra AI",
+  title: "Thirra.ai",
   description:
-    "Thirra AI is your friend Ai assistant.",
+    "Thirra.ai is your friend Ai assistant.",
   openGraph: {
-    siteName: "Thirra AI",
+    siteName: "Thirra.ai",
     url: "https://mcpchat.thirra.ai",
     images: [
       {
@@ -29,9 +34,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Thirra AI",
+    title: "Thirra.ai",
     description:
-      "Thirra AI is your friend Ai assistant.",
+      "Thirra.ai is your friend Ai assistant.",
     images: ["https://mcpchat.thirra.ai/twitter-image.png"],
   },
 };
@@ -44,6 +49,10 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
+        <link 
+          href="https://fonts.googleapis.com/css2?family=Zain:wght@200;300;400;700;800;900&display=swap" 
+          rel="stylesheet" 
+        />
         <BotIdClient
           protect={[
             {
@@ -53,7 +62,7 @@ export default function RootLayout({
           ]}
         />
       </head>
-      <body className={`${inter.className}`}>
+      <body className={`${montserrat.variable}`}>
         <Inspector>
           <Providers>
             <div className="flex h-dvh w-full">

@@ -45,9 +45,10 @@
   --sidebar-accent-foreground: oklch(0.34 0.01 2.77);
   --sidebar-border: oklch(0.93 0.04 38.69);
   --sidebar-ring: oklch(0.74 0.16 34.71);
-  --font-sans: Montserrat, sans-serif;
+  --font-sans: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
   --font-serif: Merriweather, serif;
   --font-mono: Ubuntu Mono, monospace;
+  --font-zain: 'Zain', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
   --radius: 0.625rem;
   --shadow-2xs: 0px 6px 12px -3px hsl(0 0% 0% / 0.04);
   --shadow-xs: 0px 6px 12px -3px hsl(0 0% 0% / 0.04);
@@ -92,7 +93,7 @@
   --sidebar-accent-foreground: oklch(0.26 0.01 353.48);
   --sidebar-border: oklch(0.36 0.02 342.27);
   --sidebar-ring: oklch(0.74 0.16 34.71);
-  --font-sans: Montserrat, sans-serif;
+  --font-sans: 'Montserrat', sans-serif;
   --font-serif: Merriweather, serif;
   --font-mono: Ubuntu Mono, monospace;
   --radius: 0.625rem;
@@ -139,7 +140,7 @@
   --sidebar-accent-foreground: oklch(0.34 0.01 2.77);
   --sidebar-border: oklch(0.93 0.06 60.00);
   --sidebar-ring: oklch(0.65 0.26 34.00);
-  --font-sans: Montserrat, sans-serif;
+  --font-sans: 'Montserrat', sans-serif;
   --font-serif: Merriweather, serif;
   --font-mono: Ubuntu Mono, monospace;
   --radius: 0.625rem;
@@ -186,7 +187,7 @@
   --sidebar-accent-foreground: oklch(0.15 0.01 350.00);
   --sidebar-border: oklch(0.25 0.01 340.00);
   --sidebar-ring: oklch(0.45 0.10 35.00);
-  --font-sans: Montserrat, sans-serif;
+  --font-sans: 'Montserrat', sans-serif;
   --font-serif: Merriweather, serif;
   --font-mono: Ubuntu Mono, monospace;
   --radius: 0.625rem;
@@ -233,7 +234,7 @@
   --sidebar-accent-foreground: oklch(0.20 0.03 140.00);
   --sidebar-border: oklch(0.92 0.04 140.00);
   --sidebar-ring: oklch(0.45 0.12 140.00);
-  --font-sans: Montserrat, sans-serif;
+  --font-sans: 'Montserrat', sans-serif;
   --font-serif: Merriweather, serif;
   --font-mono: Ubuntu Mono, monospace;
   --radius: 0.625rem;
@@ -280,7 +281,7 @@
   --sidebar-accent-foreground: oklch(0.22 0.04 220.00);
   --sidebar-border: oklch(0.92 0.04 220.00);
   --sidebar-ring: oklch(0.50 0.15 220.00);
-  --font-sans: Montserrat, sans-serif;
+  --font-sans: 'Montserrat', sans-serif;
   --font-serif: Merriweather, serif;
   --font-mono: Ubuntu Mono, monospace;
   --radius: 0.625rem;
@@ -327,7 +328,7 @@
   --sidebar-accent-foreground: oklch(0.25 0.04 290.00);
   --sidebar-border: oklch(0.92 0.04 290.00);
   --sidebar-ring: oklch(0.55 0.14 290.00);
-  --font-sans: Montserrat, sans-serif;
+  --font-sans: 'Montserrat', sans-serif;
   --font-serif: Merriweather, serif;
   --font-mono: Ubuntu Mono, monospace;
   --radius: 0.625rem;
@@ -374,7 +375,7 @@
   --sidebar-accent-foreground: oklch(0.28 0.04 340.00);
   --sidebar-border: oklch(0.92 0.04 340.00);
   --sidebar-ring: oklch(0.58 0.16 340.00);
-  --font-sans: Montserrat, sans-serif;
+  --font-sans: 'Montserrat', sans-serif;
   --font-serif: Merriweather, serif;
   --font-mono: Ubuntu Mono, monospace;
   --radius: 0.625rem;
@@ -421,7 +422,7 @@
   --sidebar-accent-foreground: oklch(0.18 0.03 160.00);
   --sidebar-border: oklch(0.92 0.04 160.00);
   --sidebar-ring: oklch(0.42 0.11 160.00);
-  --font-sans: Montserrat, sans-serif;
+  --font-sans: 'Montserrat', sans-serif;
   --font-serif: Merriweather, serif;
   --font-mono: Ubuntu Mono, monospace;
   --radius: 0.625rem;
@@ -468,7 +469,7 @@
   --sidebar-accent-foreground: oklch(0.25 0.04 60.00);
   --sidebar-border: oklch(0.92 0.05 90.00);
   --sidebar-ring: oklch(0.58 0.16 80.00);
-  --font-sans: Montserrat, sans-serif;
+  --font-sans: 'Montserrat', sans-serif;
   --font-serif: Merriweather, serif;
   --font-mono: Ubuntu Mono, monospace;
   --radius: 0.625rem;
@@ -519,6 +520,7 @@
   --font-sans: var(--font-sans);
   --font-mono: var(--font-mono);
   --font-serif: var(--font-serif);
+  --font-zain: var(--font-zain);
 
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
@@ -541,6 +543,8 @@
   }
   body {
     @apply bg-background text-foreground;
+    font-family: var(--font-sans);
+    font-weight: 600; /* Semi Bold */
     letter-spacing: var(--tracking-normal);
   }
 }
@@ -556,5 +560,21 @@
     -ms-overflow-style: none;  /* IE and Edge */
     /* Use Firefox-specific scrollbar hiding when supported */
     scrollbar-width: none;
+  }
+
+  /* Message text font */
+  .message-text {
+    font-family: var(--font-zain);
+    font-weight: 400;
+    font-size: 1.1rem !important; /* Larger text for better readability */
+    line-height: 1.6 !important; /* Better readability */
+  }
+
+  /* Override markdown text sizes within messages */
+  .message-text p,
+  .message-text li,
+  .message-text div {
+    font-size: 1.3rem !important;
+    line-height: 1.6 !important;
   }
 }
