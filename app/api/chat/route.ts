@@ -94,7 +94,7 @@ export async function POST(req: Request) {
   }
 
   // Initialize MCP clients using the already running persistent HTTP/SSE servers
-  const { tools, cleanup } = await initializeMCPClients(mcpServers, req.signal);
+  const { tools, cleanup } = await initializeMCPClients(mcpServers, userId, req.signal);
 
   console.log("messages", messages);
   console.log("parts", messages.map(m => m.parts.map(p => p)));
@@ -102,9 +102,43 @@ export async function POST(req: Request) {
   // Track if the response has completed
   let responseCompleted = false;
 
-  const result = streamText({
-    model: model.languageModel(selectedModel),
-    system: `You are a helpful assistant with access to a variety of tools.
+  // Configure provider options based on selected model
+  const getProviderOptions = () => {
+    const options: any = {};
+    
+    // if (selectedModel === 'gpt-5-thinking') {
+    //   options.openai = {
+    //     thinking: {
+    //       type: 'enabled',
+    //       budgetTokens: 12000
+    //     },
+    //   };
+    // }
+    
+    // if (selectedModel === 'gemini-2.5-pro-thinking') {
+    //   options.google = {
+    //     thinkingConfig: {
+    //       thinkingBudget: 1024,
+    //     },
+    //   };
+    // }
+    
+    // Always include anthropic options for other models that might use it
+    options.anthropic = {
+      thinking: {
+        type: 'enabled',
+        budgetTokens: 12000
+      },
+    };
+    
+    return options;
+  };
+
+  // Configure base parameters, handling model-specific restrictions
+  const getStreamTextConfig = () => {
+    const baseConfig = {
+      model: model.languageModel(selectedModel),
+      system: `You are a helpful assistant with access to a variety of tools.
 
     Today's date is ${new Date().toISOString().split('T')[0]}.
 
@@ -126,22 +160,29 @@ export async function POST(req: Request) {
     - Use the tools to answer the user's question.
     - If you don't know the answer, use the tools to find the answer or say you don't know.
     `,
-    messages,
-    tools,
-    maxSteps: 20,
-    providerOptions: {
-      google: selectedModel === 'gemini-2.5-pro-thinking' ? {
-        thinkingConfig: {
-          thinkingBudget: 1024,
-        },
-      } : {},
-      anthropic: {
-        thinking: {
-          type: 'enabled',
-          budgetTokens: 12000
-        },
-      }
-    },
+      messages,
+      tools,
+      maxSteps: 20,
+      providerOptions: getProviderOptions(),
+    };
+
+    // GPT-5 Mini only supports temperature of 1 (default)
+    if (selectedModel === 'gpt-5-mini') {
+      return {
+        ...baseConfig,
+        temperature: 1, // GPT-5 Mini only supports the default temperature of 1
+      };
+    }
+
+    // For other models, you can add temperature control if needed
+    return {
+      ...baseConfig,
+      // temperature: 0.7, // Uncomment and adjust if you want to set temperature for supported models
+    };
+  };
+
+  const result = streamText({
+    ...getStreamTextConfig(),
     experimental_transform: smoothStream({
       delayInMs: 5, // optional: defaults to 10ms
       chunking: 'line', // optional: defaults to 'word'

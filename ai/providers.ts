@@ -1,6 +1,7 @@
 import { createGroq } from "@ai-sdk/groq";
 import { createXai } from "@ai-sdk/xai";
 import { createGoogleGenerativeAI } from "@ai-sdk/google";
+import { createOpenAI } from "@ai-sdk/openai";
 
 import {
   customProvider,
@@ -41,6 +42,16 @@ const getApiKey = (key: string): string | undefined => {
 const geminiClient = createGoogleGenerativeAI({
   apiKey: getApiKey('GOOGLE_API_KEY'),
 });
+// Create different OpenAI clients for different models with specific configurations
+const openaiClient = createOpenAI({
+  apiKey: getApiKey('OPENAI_API_KEY'),
+});
+
+// GPT-5 Mini client with specific configuration to avoid temperature issues
+const openaiGpt5MiniClient = createOpenAI({
+  apiKey: getApiKey('OPENAI_API_KEY'),
+  // No temperature setting to use model defaults
+});
 // const xaiClient = createXai({
 //   apiKey: getApiKey('XAI_API_KEY'),
 // });
@@ -56,10 +67,15 @@ const languageModels = {
   // "kimi-k2": groqClient('moonshotai/kimi-k2-instruct'),
   // "llama4": groqClient('meta-llama/llama-4-scout-17b-16e-instruct'),
   "gemini-2.5-flash": geminiClient('gemini-2.5-flash'), // No middleware - thinking not supported
-  "gemini-2.5-pro-thinking": wrapLanguageModel({
-    model: geminiClient('gemini-2.5-pro'),
-    middleware
-  }) // With middleware - thinking supported
+  // "gemini-2.5-pro-thinking": wrapLanguageModel({
+  //   model: geminiClient('gemini-2.5-pro'),
+  //   middleware
+  // }),
+  "gpt-5-mini": openaiGpt5MiniClient('gpt-5-mini'),
+  // "gpt-5-thinking": wrapLanguagModel({
+  //   model: openaiClient('gpt-5'),
+  //   middleware
+  // }),
 };
 
 export const modelDetails: Record<keyof typeof languageModels, ModelInfo> = {
@@ -68,7 +84,7 @@ export const modelDetails: Record<keyof typeof languageModels, ModelInfo> = {
   //   name: "Kimi K2",
   //   description: "Latest version of Moonshot AI's Kimi K2 with good balance of capabilities.",
   //   apiVersion: "kimi-k2-instruct",
-  //   capabilities: ["Balanced", "Efficient", "Agentic"]
+  //   capabilities: ["Balanceed", "Efficient", "Agentic"]
   // },
   // "qwen3-32b": {
   //   provider: "Groq",
@@ -98,13 +114,27 @@ export const modelDetails: Record<keyof typeof languageModels, ModelInfo> = {
     apiVersion: "gemini-2.5-flash",
     capabilities: ["Balanced", "Efficient", "Agentic"]
   },
-  "gemini-2.5-pro-thinking": {
-    provider: "Google",
-    name: "Gemini 2.5 Pro Thinking",
-    description: "Google's Gemini 2.5 Pro model with enhanced reasoning and thinking capabilities.",
-    apiVersion: "gemini-2.5-pro",
-    capabilities: ["Reasoning", "Thinking", "Agentic"]
+  // "gemini-2.5-pro-thinking": {
+  //   provider: "Google",
+  //   name: "Gemini 2.5 Pro Thinking",
+  //   description: "Google's Gemini 2.5 Pro model with enhanced reasoning and thinking capabilities.",
+  //   apiVersion: "gemini-2.5-pro",
+  //   capabilities: ["Reasoning", "Thinking", "Agentic"]
+  // },
+  "gpt-5-mini": {
+    provider: "OpenAI",
+    name: "GPT-5 Mini",
+    description: "OpenAI's latest model with enhanced reasoning and thinking capabilities.",
+    apiVersion: "gpt-5-mini",
+    capabilities: ["Reasoning", "Fast", "Agentic"]
   }
+  // "gpt-5-thinking": {
+  //   provider: "OpenAI",
+  //   name: "GPT-5",
+  //   description: "OpenAI's latest model with enhanced reasoning and thinking capabilities.",
+  //   apiVersion: "gpt-5",
+  //   capabilities: ["Reasoning", "Thinking", "Agentic"]
+  // }
 };
 
 // Update API keys when localStorage changes (for runtime updates)

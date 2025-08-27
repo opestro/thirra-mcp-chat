@@ -34,6 +34,8 @@ export default function Chat() {
   const [userId, setUserId] = useState<string>('');
   const [generatedChatId, setGeneratedChatId] = useState<string>('');
   const [isUserIdReady, setIsUserIdReady] = useState(false);
+  const [lastResponseTime, setLastResponseTime] = useState<number | null>(null);
+  const [cooldownActive, setCooldownActive] = useState(false);
   
   // Get MCP server data from context
   const { mcpServersForApi } = useMCP();
@@ -118,12 +120,23 @@ export default function Chat() {
       },
       experimental_throttle: 100,
       onFinish: () => {
+        // Start cooldown period after response is received
+        const now = Date.now();
+        setLastResponseTime(now);
+        setCooldownActive(true);
+        
+        // Set a timer to end the cooldown after 10 seconds
+        setTimeout(() => {
+          setCooldownActive(false);
+        }, 10000);
+        
         // Invalidate the chats query to refresh the sidebar
         if (userId) {
           queryClient.invalidateQueries({ queryKey: ['chats', userId] });
         }
       },
       onError: (error) => {
+        // Don't start cooldown on error
         toast.error(
           error.message.length > 0
             ? error.message
@@ -136,6 +149,11 @@ export default function Chat() {
   // Custom submit handler
   const handleFormSubmit = useCallback((e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    
+    // Don't submit if cooldown is active
+    if (cooldownActive) {
+      return;
+    }
     
     if (!chatId && generatedChatId && input.trim()) {
       // If this is a new conversation, redirect to the chat page with the generated ID
@@ -150,7 +168,7 @@ export default function Chat() {
       // Normal submission for existing chats
       handleSubmit(e);
     }
-  }, [chatId, generatedChatId, input, handleSubmit, router]);
+  }, [chatId, generatedChatId, input, handleSubmit, router, cooldownActive]);
 
   const isLoading = status === "streaming" || status === "submitted" || isLoadingChat;
 
@@ -171,6 +189,8 @@ export default function Chat() {
               isLoading={isLoading}
               status={status}
               stop={stop}
+              cooldownActive={cooldownActive}
+              lastResponseTime={lastResponseTime}
             />
           </form>
         </div>
@@ -191,6 +211,8 @@ export default function Chat() {
               isLoading={isLoading}
               status={status}
               stop={stop}
+              cooldownActive={cooldownActive}
+              lastResponseTime={lastResponseTime}
             />
           </form>
         </>
