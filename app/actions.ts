@@ -70,6 +70,7 @@ export async function generateTitle(messages: any[]): Promise<string> {
       schema: z.object({
         title: z.string().describe("A short, descriptive title for the conversation"),
       }),
+      temperature: 1,
       prompt: `Generate a concise title (max 6 words) for a conversation that starts with: "${messageText.slice(0, 200)}"`,
     });
     console.log("titleObject", titleObject);
