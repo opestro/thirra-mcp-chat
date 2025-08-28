@@ -39,7 +39,8 @@ const getApiKey = (key: string): string | undefined => {
 // const groqClient = createGroq({
 //   apiKey: getApiKey('GROQ_API_KEY'),
 // });
-const geminiClient = createGoogleGenerativeAI({
+const geminiClient = createOpenAI({
+  baseURL: 'https://openrouter.ai/api/v1',
   apiKey: getApiKey('GOOGLE_API_KEY'),
 });
 // Create different OpenAI clients for different models with specific configurations
@@ -66,7 +67,7 @@ const languageModels = {
   // "grok-3-mini": xaiClient("grok-3-mini-latest"),
   // "kimi-k2": groqClient('moonshotai/kimi-k2-instruct'),
   // "llama4": groqClient('meta-llama/llama-4-scout-17b-16e-instruct'),
-  "gemini-2.5-flash": geminiClient('gemini-2.5-flash'), // No middleware - thinking not supported
+  "google/gemini-2.0-flash-001": geminiClient('google/gemini-2.0-flash-001'), // No middleware - thinking not supported
   // "gemini-2.5-pro-thinking": wrapLanguageModel({
   //   model: geminiClient('gemini-2.5-pro'),
   //   middleware
@@ -107,11 +108,11 @@ export const modelDetails: Record<keyof typeof languageModels, ModelInfo> = {
   //   apiVersion: "llama-4-scout-17b-16e-instruct",
   //   capabilities: ["Balanced", "Efficient", "Agentic"]
   // },
-  "gemini-2.5-flash": {
+  "google/gemini-2.0-flash-001": {
     provider: "Google",
-    name: "Gemini 2.5 Flash",
+    name: "Gemini Flash",
     description: "Google's Gemini 2.5 Flash model optimized for speed and efficiency.",
-    apiVersion: "gemini-2.5-flash",
+    apiVersion: "google/gemini-2.0-flash-001",
     capabilities: ["Balanced", "Efficient", "Agentic"]
   },
   // "gemini-2.5-pro-thinking": {
@@ -123,7 +124,7 @@ export const modelDetails: Record<keyof typeof languageModels, ModelInfo> = {
   // },
   "gpt-5-mini": {
     provider: "OpenAI",
-    name: "GPT-5 Mini",
+    name: "GPT-5 M",
     description: "OpenAI's latest model with enhanced reasoning and thinking capabilities.",
     apiVersion: "gpt-5-mini",
     capabilities: ["Reasoning", "Fast", "Agentic"]
@@ -155,4 +156,4 @@ export type modelID = keyof typeof languageModels;
 
 export const MODELS = Object.keys(languageModels);
 
-export const defaultModel: modelID = "gemini-2.5-flash";
+export const defaultModel: modelID = "google/gemini-2.0-flash-001";

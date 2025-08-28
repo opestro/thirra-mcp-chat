@@ -3,6 +3,7 @@
 import { generateObject } from "ai";
 import { z } from "zod";
 import { createGoogleGenerativeAI } from "@ai-sdk/google";
+import { openai, createOpenAI } from "@ai-sdk/openai";
 
 // Helper to get API keys from environment variables (server-side only)
 const getApiKey = (key: string): string | undefined => {
@@ -11,7 +12,8 @@ const getApiKey = (key: string): string | undefined => {
 };
 
 // Configure Google client with the same setup as providers.ts
-const geminiClient = createGoogleGenerativeAI({
+const geminiClient = createOpenAI({
+  baseURL: 'https://openrouter.ai/api/v1',
   apiKey: getApiKey('GOOGLE_API_KEY'),
 });
 
@@ -65,7 +67,7 @@ export async function generateTitle(messages: any[]): Promise<string> {
 
    try {
     const { object: titleObject } = await generateObject({
-      model: geminiClient('models/gemini-2.5-flash'),
+      model: geminiClient('google/gemini-2.5-flash-lite'),
       schema: z.object({
         title: z.string().describe("A short, descriptive title for the conversation"),
       }),
