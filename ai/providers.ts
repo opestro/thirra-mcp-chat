@@ -67,7 +67,7 @@ const languageModels = {
   // "grok-3-mini": xaiClient("grok-3-mini-latest"),
   // "kimi-k2": groqClient('moonshotai/kimi-k2-instruct'),
   // "llama4": groqClient('meta-llama/llama-4-scout-17b-16e-instruct'),
-  "google/gemini-2.0-flash-001": geminiClient('google/gemini-2.0-flash-001'), // No middleware - thinking not supported
+  "google/gemini-2.5-flash-lite": geminiClient('google/gemini-2.5-flash-lite'), // No middleware - thinking not supported
   // "gemini-2.5-pro-thinking": wrapLanguageModel({
   //   model: geminiClient('gemini-2.5-pro'),
   //   middleware
@@ -108,11 +108,11 @@ export const modelDetails: Record<keyof typeof languageModels, ModelInfo> = {
   //   apiVersion: "llama-4-scout-17b-16e-instruct",
   //   capabilities: ["Balanced", "Efficient", "Agentic"]
   // },
-  "google/gemini-2.0-flash-001": {
+  "google/gemini-2.5-flash-lite": {
     provider: "Google",
     name: "Gemini Flash",
-    description: "Google's Gemini 2.5 Flash model optimized for speed and efficiency.",
-    apiVersion: "google/gemini-2.0-flash-001",
+    description: "Google's Gemini 2.5 Flash -l model optimized for speed and efficiency.",
+    apiVersion: "google/gemini-2.5-flash-lite",
     capabilities: ["Balanced", "Efficient", "Agentic"]
   },
   // "gemini-2.5-pro-thinking": {
@@ -156,4 +156,4 @@ export type modelID = keyof typeof languageModels;
 
 export const MODELS = Object.keys(languageModels);
 
-export const defaultModel: modelID = "gpt-5-mini";
+export const defaultModel: modelID = "google/gemini-2.5-flash-lite";

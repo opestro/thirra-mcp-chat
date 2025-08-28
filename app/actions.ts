@@ -13,7 +13,8 @@ const getApiKey = (key: string): string | undefined => {
 
 // Configure Google client with the same setup as providers.ts
 const openaiClient = createOpenAI({
-  apiKey: getApiKey('OPENAI_API_KEY'),
+  baseURL: 'https://openrouter.ai/api/v1',
+  apiKey: getApiKey('GEMINI_API_KEY'),
 });
 
 // Helper to extract text content from a message regardless of format
@@ -66,7 +67,7 @@ export async function generateTitle(messages: any[]): Promise<string> {
 
    try {
     const { object: titleObject } = await generateObject({
-      model: openaiClient('gpt-5-nano'),
+      model: openaiClient('google/gemini-2.5-flash-lite'),
       schema: z.object({
         title: z.string().describe("A short, descriptive title for the conversation"),
       }),
