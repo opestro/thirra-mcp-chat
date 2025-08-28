@@ -14,7 +14,7 @@ const getApiKey = (key: string): string | undefined => {
 // Configure Google client with the same setup as providers.ts
 const openaiClient = createOpenAI({
   baseURL: 'https://openrouter.ai/api/v1',
-  apiKey: getApiKey('GEMINI_API_KEY'),
+  apiKey: getApiKey('GOOGLE_API_KEY'),
 });
 
 // Helper to extract text content from a message regardless of format
