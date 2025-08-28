@@ -156,4 +156,4 @@ export type modelID = keyof typeof languageModels;
 
 export const MODELS = Object.keys(languageModels);
 
-export const defaultModel: modelID = "google/gemini-2.0-flash-001";
+export const defaultModel: modelID = "gpt-5-mini";
